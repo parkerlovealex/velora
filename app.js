@@ -223,6 +223,8 @@ function setPanelState(kind, title, message, primaryLabel = "", secondaryLabel =
   $("statePrimary").textContent = primaryLabel;
   $("stateSecondary").hidden = !secondaryLabel;
   $("stateSecondary").textContent = secondaryLabel;
+  $("statePreview").hidden = kind !== "error" || state.preview;
+  $("previewNotice").hidden = !state.preview;
   $("statePanel").dataset.state = kind;
   $("resultsLabel").textContent = kind === "loading" ? "Loading profiles" : "Profile discovery";
 }
@@ -248,7 +250,7 @@ async function loadProfiles() {
     }
   } catch (error) {
     console.error("Profile loading failed:", error);
-    setPanelState("error", "Profiles could not be loaded", "The profile service did not respond. Try again in a moment.", "Retry profiles", "Change filters");
+    setPanelState("error", "Profiles could not be loaded", "The frontend is online, but its profile API (/api/profiles) is not available. Connect a backend to load real members, or open the sample preview to review the interface.", "Retry profiles", "Change filters");
   } finally {
     state.loading = false;
     updateFilterCount();
@@ -264,7 +266,8 @@ function renderProfile() {
 
   $("statePanel").hidden = true;
   $("profileCard").hidden = false;
-  $("resultsLabel").textContent = "Member profile";
+  $("resultsLabel").textContent = state.preview ? "Sample profile · preview only" : "Member profile";
+  $("previewNotice").hidden = !state.preview;
 
   const photo = profile.photos?.[state.photoIndex] || profile.photos?.[0];
   const image = safePhoto(photo);
@@ -275,7 +278,7 @@ function renderProfile() {
     $("profilePhoto").alt = "Profile photograph unavailable";
   };
 
-  $("profileCity").textContent = profile.city ? `${profile.city}, Bangladesh` : "";
+  $("profileCity").textContent = profile.city || "";
   $("verifiedLabel").hidden = profile.verified !== true;
   $("profileName").textContent = profile.name || "";
   $("profileAge").textContent = profile.age ? String(profile.age) : "";
@@ -611,6 +614,13 @@ function wireEvents() {
   $("resetFilters").addEventListener("click", resetFilters);
   $("statePrimary").addEventListener("click", loadProfiles);
   $("stateSecondary").addEventListener("click", openFilters);
+  $("statePreview").addEventListener("click", () => {
+    state.preview = true;
+    state.profiles = [];
+    state.profileIndex = 0;
+    state.photoIndex = 0;
+    loadProfiles();
+  });
 
   $("passButton").addEventListener("click", () => submitProfileAction("pass"));
   $("superButton").addEventListener("click", () => submitProfileAction("super_like"));
@@ -669,6 +679,7 @@ function wireEvents() {
 async function init() {
   $("currentYear").textContent = String(new Date().getFullYear());
   $("photoCredits").hidden = !state.preview;
+  $("previewNotice").hidden = !state.preview;
   $("filtersForm").addEventListener("reset", resetFilters);
   wireEvents();
   updateCityText();

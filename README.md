@@ -45,6 +45,7 @@ The destination button appears only when a valid URL is available. It navigates 
 - No browser GPS or Geolocation API.
 - No location permission prompt.
 - City is selected manually in the header; default city is Khulna.
+- Profile location displays the city name only (for example, “Khulna”), without a hard-coded country suffix.
 - No exact distance or guessed neighbourhood is displayed.
 
 ## Production API contract
@@ -119,7 +120,7 @@ Request: `{ "profileId": "member-id", "initialMessage": "Hello" }`
 
 To review the interface before a backend is connected, open the site with `?preview=1`. This loads local fixture profiles and keeps preview likes and conversations in this browser only.
 
-The normal URL does not load fixture profiles. It requests the production API and shows a real loading, empty or error state if the service is unavailable.
+The normal URL does not load fixture profiles. It requests the production API and shows a real loading, empty or error state if the service is unavailable. If the API is unavailable, the error state offers an explicit “Preview sample profiles” action. Sample profiles are clearly labelled as preview data and are not real members.
 
 Preview photos are stand-ins from Unsplash. Replace them with member-uploaded, consented images before launch.
 

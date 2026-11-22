@@ -308,3 +308,25 @@ kbd { min-width: 23px; height: 23px; display: inline-grid; place-items: center; 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+.button-tertiary {
+  border-color: transparent;
+  background: var(--action-soft);
+  color: var(--action-dark);
+}
+.button-tertiary:hover {
+  border-color: #E5CDD2;
+  background: #EEDDE1;
+}
+.preview-notice {
+  width: fit-content;
+  margin: -2px 0 12px;
+  padding: 7px 10px;
+  border: 1px solid #E5CDD2;
+  border-radius: 8px;
+  background: var(--action-soft);
+  color: var(--action-dark);
+  font-size: 12px;
+  font-weight: 600;
+}
+.state-actions { flex-wrap: wrap; }
